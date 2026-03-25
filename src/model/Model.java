@@ -64,35 +64,43 @@ public class Model {
     
     // AJOUTER ADHERENT
     
-    public static void ajoutAd(String nom, String prenom , String email) throws SQLException {
+    public void ajoutAd(String num, String nom, String prenom , String email) throws SQLException {
     	Statement stmt = con.createStatement();
-    	String sql = "INSERT INTO adherent (nom, prenom, email ) VALUES ('"+ nom + "', '" + prenom + "', " 
-        		 + email + ")";
+    	String sql = "INSERT INTO adherent (num,nom, prenom, email) VALUES ('"+ num + "', '"+ nom + "','"+ prenom + "', '" + email + "')";
     	stmt.executeUpdate(sql);
     }
     
     
+    // 	RESERVATION
     
-    
-    
-    // RESERVATION
-    // verif si isbn existe
-    public ResultSet res(String num ,String ISBN) throws SQLException {
-    	Statement stmt = con.createStatement();
-    	String sqlverif = "SELECT adherent FROM livre WHERE ISBN = '" + ISBN + "'";
-    	ResultSet resultatRes = stmt.executeQuery(sqlverif);
-    	return resultatRes;
-	
-    }
-    
-    // MISE A JOUR BDD EN AJT LE NUM ADHERENT A L'ISBN
-    public void reserver(String num,String ISBN) throws SQLException {
-    	Statement stmt = con.createStatement();
-    	String sql = "UPDATE livre SET adherent ='"+ num +"'WHERE ISBN ='"+ISBN +"'";
-		stmt.executeUpdate(sql);
-		System.out.println("Livre emprunté avec succès !");
+ // verifier ISBN
+    public boolean verifISBN(String ISBN) throws SQLException {
+        Statement stmt = con.createStatement();
+        String sql = "SELECT * FROM livre WHERE ISBN = '" + ISBN + "'";
+        ResultSet rs = stmt.executeQuery(sql);
+
+        return rs.next();
     }
 
+    // verifier dispo
+    public boolean livreDisponible(String ISBN) throws SQLException {
+        Statement stmt = con.createStatement();
+        String sql = "SELECT adherent FROM livre WHERE ISBN = '" + ISBN + "'";
+        ResultSet rs = stmt.executeQuery(sql);
+
+        if (rs.next()) {
+            String adherent = rs.getString("adherent");
+            return (adherent == null || adherent.equals(""));
+        }
+        return false;
+    }
+
+    // reserver
+    public void reserver(String num, String ISBN) throws SQLException {
+        Statement stmt = con.createStatement();
+        String sql = "UPDATE livre SET adherent = '" + num + "' WHERE ISBN = '" + ISBN + "'";
+        stmt.executeUpdate(sql);
+    }
     
     
     
