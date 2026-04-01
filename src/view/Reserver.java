@@ -2,6 +2,7 @@ package view;
 
 import java.sql.SQLException;
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ public class Reserver {
     private JTextField txtISBN;
     private JButton btnReserver;
     private JButton btnOkISBN;
+    private JLabel lblMessage;
 
     public Reserver() throws ClassNotFoundException, SQLException {
         initialize();
@@ -60,10 +62,16 @@ public class Reserver {
         btnOkISBN.setBounds(335, 105, 89, 23);
         btnOkISBN.setEnabled(false);
         frmProfil.getContentPane().add(btnOkISBN);
+        
+        lblMessage = new JLabel("");
+        lblMessage.setBounds(119, 220, 300, 20);
+        frmProfil.getContentPane().add(lblMessage);
 
         JButton btnOkNum = new JButton("Ok");
         btnOkNum.setBounds(335, 64, 89, 23);
         frmProfil.getContentPane().add(btnOkNum);
+        
+  
 
         // ===== bouton adherent =====
         btnOkNum.addActionListener(new ActionListener() {
@@ -75,16 +83,18 @@ public class Reserver {
                     Model model = new Model();
                     boolean resultat = model.verifAdherent(num);
 
-                    if (resultat) {
+                    if (resultat) { // true
                         txtISBN.setEnabled(true);
                         btnReserver.setEnabled(true);
                         btnOkISBN.setEnabled(true);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Numéro invalide");
+                    } else { //false
+                    	lblMessage.setText("Numéro invalide");
+                    	lblMessage.setForeground(java.awt.Color.RED);
+                        
                     }
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace();// Affiche l'erreur complète dans la console
                 }
             }
         });
@@ -98,14 +108,17 @@ public class Reserver {
                 try {
                     Model model = new Model();
 
-                    if (model.verifISBN(ISBN)) {
+                    if (model.verifISBN(ISBN)) { //true
                         System.out.println("ISBN valide");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "ISBN invalide");
+                    } else { // false
+                    	lblMessage.setText("ISBN invalide");
+                    	lblMessage.setForeground(java.awt.Color.RED);
+                    	
+                        
                     }
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace();// Affiche l'erreur complète dans la console
                 }
             }
         });
@@ -120,19 +133,23 @@ public class Reserver {
                 try {
                     Model model = new Model();
 
-                    if (model.livreDisponible(ISBN)) {
+                    
+					if (model.livreDisponible(ISBN)) { // true
                         model.reserver(num, ISBN);
-                        JOptionPane.showMessageDialog(null, "Livre réservé !");
+                        lblMessage.setText("Livre bien emprunté");
+                        lblMessage.setForeground(java.awt.Color.GREEN);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Livre déjà emprunté !");
+                        lblMessage.setText("Livre déjà emprunté");
+                        lblMessage.setForeground(java.awt.Color.RED);
                     }
 
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erreur SQL !");
+                    ex.printStackTrace();// Affiche l'erreur complète dans la console
+                    lblMessage.setText("Erreur SQL ");
+                    lblMessage.setForeground(java.awt.Color.RED);
                 } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Driver introuvable !");
+                    ex.printStackTrace();// Affiche l'erreur complète dans la console
+                    
                 }
             }
         });

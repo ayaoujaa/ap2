@@ -13,6 +13,7 @@ public class CreationAd {
     private JTextField textEmail;
     private JTextField textNum;
     private JTextField textNom;
+    private JLabel lblMessage;
 
 
     public CreationAd() {
@@ -46,6 +47,10 @@ public class CreationAd {
         JLabel lblPrix = new JLabel("Email :");
         lblPrix.setBounds(43, 187, 49, 17);
         frmAjtlivre.getContentPane().add(lblPrix);
+        
+        lblMessage = new JLabel("");
+        lblMessage.setBounds(43, 215, 300, 20);
+        frmAjtlivre.getContentPane().add(lblMessage);
         
         textEmail = new JTextField();
         textEmail.setColumns(10);
@@ -89,16 +94,20 @@ public class CreationAd {
                 System.out.println("Nom:" + nom);
                 System.out.println("Prenom : " + prenom);
                 System.out.println("Email: " + email);
+                
                 Model model = new Model(); // initialise la connexion
                 model.ajoutAd(num,nom, prenom, email);
                 
-
-                JOptionPane.showMessageDialog(frmAjtlivre, "Adherent ajouté avec succès !");
+                lblMessage.setText("Adherent ajouté avec succès !");
+                lblMessage.setForeground(java.awt.Color.GREEN); 
+                
+                
+                
             } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace(); // Affiche l'erreur complète dans la console
-                JOptionPane.showMessageDialog(frmAjtlivre,
-                    "Erreur SQL : " + ex.getMessage(), // Affiche juste le message SQL dans une popup
-                    "Erreur SQL", JOptionPane.ERROR_MESSAGE);
+                lblMessage.setText(" L'adherent existe déjà ! "); 
+                lblMessage.setForeground(java.awt.Color.RED); 
+                
             }
         });
 	

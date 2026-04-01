@@ -27,6 +27,9 @@ public class Catalogue {
         JScrollPane scrollPane = new JScrollPane(textArea);
         frame.add(scrollPane, BorderLayout.CENTER);
 
+        
+        
+        
         // Récupération du ResultSet depuis le modèle
         ResultSet listeLivre = model.getAllLivres();
 
@@ -42,9 +45,6 @@ public class Catalogue {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) throws Exception {
-        Model model = new Model();
-        new Catalogue(model);
-    }
+    
 }
 

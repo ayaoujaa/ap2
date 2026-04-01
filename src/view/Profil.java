@@ -17,6 +17,7 @@ public class Profil {
     private JTextField txtNom;
     private JTextField txtPrenom;
     private JTextField txtEmail;
+    private JLabel lblMessage;
     
 
     public Profil() throws ClassNotFoundException, SQLException {
@@ -48,6 +49,10 @@ public class Profil {
         lblTitre.setBounds(216, 22, 46, 14);
         frmProfil.getContentPane().add(lblTitre);
 
+        lblMessage = new JLabel("");
+        lblMessage.setBounds(47, 96, 300, 20);
+        frmProfil.getContentPane().add(lblMessage);
+        
         JPanel panel = new JPanel();
         panel.setBounds(22, 153, 559, 195);
         frmProfil.getContentPane().add(panel);
@@ -81,6 +86,8 @@ public class Profil {
         JLabel lblEmail = new JLabel("Email");
         lblEmail.setBounds(32, 99, 46, 14);
         panel.add(lblEmail);
+        
+        
 
         JButton btnMaj = new JButton("Maj");
         btnMaj.addActionListener(new ActionListener() {
@@ -89,7 +96,7 @@ public class Profil {
                 Model model = null;
 
                 try {
-                    model = new Model(); // création du modèle
+                    model = new Model(); 
                 } catch (ClassNotFoundException | SQLException e1) {
                     e1.printStackTrace();
                 }
@@ -132,21 +139,27 @@ public class Profil {
                     
                     // verifAdherent renvoie si le num existe
                     if (model.verifAdherent(num)) {
-                        // numéro valide on débloque le bouton MAJ
-                    	
-                    	txtNom.setEnabled(true);
+
+                        // On efface le message
+                        lblMessage.setText("");
+                        
+                        lblMessage.setText("Numéro valide ! ");
+                        lblMessage.setForeground(java.awt.Color.GREEN); 
+                        
+                        // numéro valide → on débloque
+                        txtNom.setEnabled(true);
                         txtPrenom.setEnabled(true);
                         txtEmail.setEnabled(true);
                         btnMaj.setEnabled(true);
 
-                        
-
                     } else {
-                        JOptionPane.showMessageDialog(null, "Numéro invalide");
+
+                        lblMessage.setText("Numéro invalide");
+                        lblMessage.setForeground(java.awt.Color.RED);
                     }
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace();// Affiche l'erreur complète dans la console
                 }
             }
         });

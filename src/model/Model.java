@@ -40,13 +40,12 @@ public class Model {
     
     // verification du num adherent
     
-    
     public boolean verifAdherent(String num) throws SQLException {
         Statement stmt = con.createStatement();
         String sql = "SELECT num FROM adherent WHERE num = '" + num + "'";
         ResultSet rs = stmt.executeQuery(sql);
 
-        // retourne true si le numéro existe, false sinon
+        // retourne true si numéro existe
         return rs.next();
     }
 
@@ -73,7 +72,7 @@ public class Model {
     
     // 	RESERVATION
     
- // verifier ISBN
+ // verifier si l'ISBN existe
     public boolean verifISBN(String ISBN) throws SQLException {
         Statement stmt = con.createStatement();
         String sql = "SELECT * FROM livre WHERE ISBN = '" + ISBN + "'";
@@ -82,18 +81,21 @@ public class Model {
         return rs.next();
     }
 
-    // verifier dispo
+    // verifier si livre est dispo
     public boolean livreDisponible(String ISBN) throws SQLException {
         Statement stmt = con.createStatement();
         String sql = "SELECT adherent FROM livre WHERE ISBN = '" + ISBN + "'";
         ResultSet rs = stmt.executeQuery(sql);
 
-        if (rs.next()) {
+        if (rs.next()) { // retourne true si livre dispo ou false
             String adherent = rs.getString("adherent");
-            return (adherent == null || adherent.equals(""));
+         // Dispo si la colonne adherent est NULL ou vide
+            return (adherent == null || adherent.equals("")); 
         }
-        return false;
+        return false; // livre existe pas
     }
+    
+    
 
     // reserver
     public void reserver(String num, String ISBN) throws SQLException {
@@ -101,6 +103,10 @@ public class Model {
         String sql = "UPDATE livre SET adherent = '" + num + "' WHERE ISBN = '" + ISBN + "'";
         stmt.executeUpdate(sql);
     }
+    
+    
+    
+    
     
     
     
